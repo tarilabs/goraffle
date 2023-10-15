@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>goRaffle!</title>
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        WebAssembly.instantiateStreaming(fetch("raffle.wasm"), go.importObject).then((result) => {
+            go.run(result.instance);
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <h1 class="text-4xl font-semibold text-center p-4">
+        <i>go</i>Raffle!
+    </h1>
+    <div class="container mx-auto flex p-4">
+        <div class="w-1/2 p-4">
+            <h1 class="text-2xl font-semibold mb-4">Participants:</h1>
+            <div class="mb-4">
+                <textarea class="w-full h-64 p-2 border rounded" id="inputTextarea" placeholder="Enter text..."></textarea>
+            </div>
+            <div>
+                <button class="px-4 py-2 bg-blue-500 text-white rounded" id="submitButton">Submit</button>
+            </div>
+        </div>
+        <div class="w-1/2 p-4">
+            <h1 class="text-2xl font-semibold mb-4">Raffle results:</h1>
+            <ol id="outputList" class="list-decimal list-inside">
+                <!-- Ordered list items will be added dynamically using JavaScript -->
+            </ol>
+        </div>
+    </div>
+    <div class="bg-black text-white text-center p-4 fixed bottom-0 w-full">
+        &copy; 2023 Your Website Name. All Rights Reserved.
+    </div>
+
+    <script>
+        const inputTextarea = document.getElementById('inputTextarea');
+        const submitButton = document.getElementById('submitButton');
+        const outputList = document.getElementById('outputList');
+
+        submitButton.addEventListener('click', () => {
+            const inputValue = inputTextarea.value.trim();
+            if (inputValue) {
+                const LIs = raffle(inputValue);
+                outputList.innerHTML = LIs;
+            }
+        });
+    </script>
+</body>
+</html>
